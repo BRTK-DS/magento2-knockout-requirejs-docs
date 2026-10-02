@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dokumentacja: Magento2, KnockoutJS i RequireJS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .main-content {
+            display: flex;
+            min-height: 600px;
+        }
+        
+        nav {
+            width: 280px;
+            background: #f8f9fa;
+            border-right: 2px solid #e0e0e0;
+            padding: 30px 0;
+            position: sticky;
+            top: 0;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+        
+        nav ul {
+            list-style: none;
+        }
+        
+        nav li {
+            margin: 0;
+        }
+        
+        nav a {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        nav a:hover {
+            background: #e8e8ff;
+            border-left-color: #667eea;
+            color: #667eea;
+        }
+        
+        nav a.active {
+            background: #e8e8ff;
+            border-left-color: #667eea;
+            color: #667eea;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        
+        section {
+            margin-bottom: 60px;
+            display: none;
+        }
+        
+        section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+        
+        .code-label {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .tip, .warning, .info {
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+        
+        .tip {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .feature-card h4 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+        
+        li {
+            margin: 10px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        table td {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 12px;
+        }
+        
+        table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .toc {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 30px;
+        }
+        
+        .toc h3 {
+            margin-top: 0;
+        }
+        
+        .toc ul {
+            margin: 10px 0 0 20px;
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            nav {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid #e0e0e0;
+                max-height: none;
+                padding: 15px 0;
+            }
+            
+            nav a {
+                padding: 8px 15px;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Dokumentacja Magento2</h1>
+            <p>KnockoutJS + RequireJS | Kompletny Przewodnik</p>
+        </header>
+        
+        <div class="main-content">
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-section="spis">📋 Spis Treści</a></li>
+                    <li><a href="#" class="nav-link" data-section="intro">🚀 Wprowadzenie</a></li>
+                    <li><a href="#" class="nav-link" data-section="magento2">🏪 Magento2</a></li>
+                    <li><a href="#" class="nav-link" data-section="knockoutjs">⚡ KnockoutJS</a></li>
+                    <li><a href="#" class="nav-link" data-section="requirejs">📦 RequireJS</a></li>
+                    <li><a href="#" class="nav-link" data-section="integracja">🔗 Integracja</a></li>
+                    <li><a href="#" class="nav-link" data-section="przyklady">💻 Praktyczne Przykłady</a></li>
+                    <li><a href="#" class="nav-link" data-section="best-practices">✅ Best Practices</a></li>
+                    <li><a href="#" class="nav-link" data-section="troubleshooting">🔧 Rozwiązywanie Problemów</a></li>
+                </ul>
+            </nav>
+            
+            <div class="content">
+                
+                <!-- SPIS TREŚCI -->
+                <section id="spis" class="active">
+                    <h2>📋 Spis Treści</h2>
+                    <div class="toc">
+                        <h3>Zawartość Dokumentacji</h3>
+                        <ul>
+                            <li><strong>Wprowadzenie</strong> - Czym jest Magento2, KnockoutJS i RequireJS?</li>
+                            <li><strong>Magento2</strong> - Architektura, struktura plików, integracja front-end</li>
+                            <li><strong>KnockoutJS</strong> - Observable, bindingi, komponenty, szablony</li>
+                            <li><strong>RequireJS</strong> - Moduły, konfiguracja, załadowanie asynchroniczne</li>
+                            <li><strong>Integracja</strong> - Jak wszystko działa razem w Magento2</li>
+                            <li><strong>Praktyczne Przykłady</strong> - Kod gotowy do użycia</li>
+                            <li><strong>Best Practices</strong> - Standardy i dobre praktyki</li>
+                            <li><strong>Rozwiązywanie Problemów</strong> - FAQ i debug</li>
+                        </ul>
+                    </div>
+                    <p>Ta dokumentacja to kompleksowy przewodnik po integracji KnockoutJS i RequireJS w Magento2. Znajdziesz tu wszystko, czego potrzebujesz, aby zacząć pracować z tymi technologiami!</p>
+                </section>
+                
+                <!-- WPROWADZENIE -->
+                <section id="intro">
+                    <h2>🚀 Wprowadzenie</h2>
+                    
+                    <h3>Co to jest?</h3>
+                    <p>Magento2 to nowoczesna platforma e-commerce, która wykorzystuje zaawansowane technologie front-end do budowania interaktywnych interfejsów użytkownika. Trzy główne elementy tej dokumentacji to:</p>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>Magento2</h4>
+                            <p>Platform e-commerce zorientowana na architektę modułową z potężnymi możliwościami dostosowania i rozszerzenia.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>KnockoutJS</h4>
+                            <p>Framework JavaScript do tworzenia dynamicznych interfejsów użytkownika za pomocą reactive data binding.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>RequireJS</h4>
+                            <p>Module loader dla JavaScriptu, który pozwala organizować kod w moduły i zarządzać zależnościami.</p>
+                        </div>
+                    </div>
+                    
+                    <h3>Dlaczego razem?</h3>
+                    <p>Magento2 używa RequireJS do zarządzania modułami JavaScript i KnockoutJS do tworzenia reaktywnych komponentów UI. Ta kombinacja pozwala na:</p>
+                    <ul>
+                        <li>Modularny, łatwy do utrzymania kod</li>
+                        <li>Reaktywne wiązanie danych (data binding)</li>
+                        <li>Efektywne zarządzanie zależnościami</li>
+                        <li>Prosty proces rozszerzania funkcjonalności</li>
+                    </ul>
+                    
+                    <div class="info">
+                        <strong>ℹ️ Uwaga:</strong> Magento2 stopniowo przechodzi na Vue.js, ale KnockoutJS jest nadal szeroko używany w wielu instalacjach.
+                    </div>
+                </section>
+                
+                <!-- MAGENTO2 -->
+                <section id="magento2">
+                    <h2>🏪 Magento2</h2>
+                    
+                    <h3>Struktura Projektu</h3>
+                    <p>Magento2 ma dobrze zdefiniowaną strukturę katalogów:</p>
+                    
+                    <pre><code>magento2-project/
+├── app/
+│   ├── code/              # Moduły niestandardowe
+│   │   └── Vendor/Module/
+│   │       ├── view/      # Szablony, layout, web
+│   │       ├── Controller/
+│   │       ├── Model/
+│   │       └── etc/
+│   ├── design/            # Motywy
+│   │   └── frontend/
+│   │       └── Vendor/theme/
+│   │           └── web/   # CSS, JS, obrazy
+│   └── etc/               # Globalna konfiguracja
+├── pub/
+│   ├── static/            # Pliki statyczne (CSS, JS, obrazy)
+│   ├── media/             # Pliki mediów
+│   └── index.php
+├── var/
+│   ├── cache/
+│   ├── log/
+│   └── generation/
+└── vendor/                # Zależności Composer</code></pre>
+                    
+                    <h3>Katalog View</h3>
+                    <p>Najważniejszy dla front-endu. Zawiera:</p>
+                    
+                    <table>
+                        <tr>
+                            <th>Katalog</th>
+                            <th>Opis</th>
+                        </tr>
+                        <tr>
+                            <td><code>view/frontend/</code></td>
+                            <td>Pliki widoczne dla klientów</td>
+                        </tr>
+                        <tr>
+                            <td><code>view/adminhtml/</code></td>
+                            <td>Pliki dla panelu administracyjnego</td>
+                        </tr>
+                        <tr>
+                            <td><code>layout/</code></td>
+                            <td>Pliki XML definiujące strukturę stron</td>
+                        </tr>
+                        <tr>
+                            <td><code>templates/</code></td>
+                            <td>Szablony PHTML (PHP + HTML)</td>
+                        </tr>
+                        <tr>
+                            <td><code>web/</code></td>
+                            <td>CSS, JavaScript, obrazy</td>
+                        </tr>
+                    </table>
+                    
+                    <h3>Konfiguracja Modułu</h3>
+                    <p>Każdy moduł musi mieć plik konfiguracyjny <code>etc/module.xml</code>:</p>
+                    
+                    <div class="code-label">XML</div>
+                    <pre>&lt;?xml version="1.0"?&gt;
+&lt;config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd"&gt;
+    &lt;module name="Vendor_Module" setup_version="1.0.0"&gt;
+        &lt;sequence&gt;
+            &lt;module name="Magento_Catalog"/&gt;
+        &lt;/sequence&gt;
+    &lt;/module&gt;
+&lt;/config&gt;</pre>
+                    
+                    <h3>Załadowanie JavaScriptu w Magento2</h3>
+                    <p>JavaScript ładowany jest za pośrednictwem pliku <code>layout</code> lub <code>require.js</code>:</p>
+                    
+                    <div class="code-label">XML (Layout File)</div>
+                    <pre>&lt;?xml version="1.0"?&gt;
+&lt;page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="..."&gt;
+    &lt;body&gt;
+        &lt;referenceContainer name="content"&gt;
+            &lt;block class="Magento\Framework\View\Element\Template" 
+                   name="my.custom.block" 
+                   template="Vendor_Module::mytemplate.phtml"/&gt;
+        &lt;/referenceContainer&gt;
+    &lt;/body&gt;
+&lt;/page&gt;</pre>
+                    
+                    <div class="tip">
+                        <strong>💡 Tip:</strong> Zawsze umieszczaj swoje pliki JavaScript w <code>view/frontend/web/js/</code> i CSS w <code>view/frontend/web/css/</code>
+                    </div>
+                </section>
+                
+                <!-- KNOCKOUTJS -->
+                <section id="knockoutjs">
+                    <h2>⚡ KnockoutJS</h2>
+                    
+                    <h3>Czym jest KnockoutJS?</h3>
+                    <p>KnockoutJS to biblioteka JavaScript, która implementuje wzorzec Model-View-ViewModel (MVVM). Umożliwia automatyczne synchronizowanie danych między modelem a widokiem.</p>
+                    
+                    <h3>Kluczowe Koncepty</h3>
+                    
+                    <h4>1. Observable (Obserwowalne)</h4>
+                    <p>Observable to reaktywna zmienna, która powiadamia wszystkie zależności o zmianach:</p>
+                    
+                    <div class="code-label">JavaScript</div>
+                    <pre>define([], function() {
+    'use strict';
+    
+    return {
+        myObservable: ko.observable('Wartość początkowa'),
+        myComputed: ko.computed(function() {
+            return 'Obliczona: ' + this.myObservable();
+        }, this)
+    };
+});</pre>
+                    
+                    <h4>2. Bindingi</h4>
+                    <p>Bindingi łączą elementy HTML z danymi. Najpopularniejsze:</p>
+                    
+                    <table>
+                        <tr>
+                            <th>Binding</th>
+                            <th>Zastosowanie</th>
+                        </tr>
+                        <tr>
+                            <td><code>data-bind="text: observable"</code></td>
+                            <td>Wyświetlanie tekstu</td>
+                        </tr>
+                        <tr>
+                            <td><code>data-bind="value: observable"</code></td>
+                            <td>Wartość input/select</td>
+                        </tr>
+                        <tr>
+                            <td><code>data-bind="click: funkcja"</code></td>
+                            <td>Obsługa kliknięcia</td>
+                        </tr>
+                        <tr>
+                            <td><code>data-bind="foreach: tablica"</code></td>
+                            <td>Pętla po elementach</td>
+                        </tr>
+                        <tr>
+                            <td><code>data-bind="visible: warunek"</code></td>
+                            <td>Warunkowa widoczność</td>
+                        </tr>
+                        <tr>
+                            <td><code>data-bind="css: {klasa: warunek}"</code></td>
+                            <td>Warunkowe klasy CSS</td>
+                        </tr>
+                    </table>
+                    
+                    <h4>3. Komponenty</h4>
+                    <p>Komponenty to reużywalne bloki kodu z własnym szablonern i logiką:</p>
+                    
+                    <div class="code-label">JavaScript - Rejestracja Komponentu</div>
+                    <pre>ko.components.register('my-component', {
+    viewModel: {
+        createViewModel: function(params) {
+            return {
+                message: ko.observable('Cześć!'),
+                items: ko.observableArray([1, 2, 3])
+            };
+        }
+    },
+    template: `
+        &lt;div class="my-component"&gt;
+            &lt;p data-bind="text: message"&gt;&lt;/p&gt;
+            &lt;ul data-bind="foreach: items"&gt;
+                &lt;li data-bind="text: $data"&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    `
+});</pre>
+                    
+                    <h4>4. Computed Observables</h4>
+                    <p>Automatycznie przeliczane wartości zależne od innych observables:</p>
+                    
+                    <div class="code-label">JavaScript</div>
+                    <pre>var viewModel = {
+    firstName: ko.observable('Jan'),
+    lastName: ko.observable('Kowalski'),
+    fullName: ko.computed(function() {
+        return this.firstName() + ' ' + this.lastName();
+    }, this)
+};
+
+console.log(viewModel.fullName()); // "Jan Kowalski"</pre>
+                    
+                    <h3>Zaawansowane Techniki</h3>
+                    
+                    <h4>Subscriptions (Subskrypcje)</h4>
+                    <p>Reaguj na zmiany w observables:</p>
+                    
+                    <div class="code-label">JavaScript</div>
+                    <pre>myObservable.subscribe(function(newValue) {
+    console.log('Nowa wartość:', newValue);
+});
+
+myObservable('nowa wartość'); // Wyświetli: "Nowa wartość: nowa wartość"</pre>
+                    
+                    <h4>Custom Bindings</h4>
+                    <p>Stwórz własne bindingi dla specjalistycznych wymagań:</p>
+                    
+                    <div class="code-label">JavaScript</div>
+                    <pre>ko.bindingHandlers.highlight = {
+    update: function(element, valueAccessor) {
+        var value = valueAccessor();
+        if (value()) {
+            $(element).addClass('highlighted');
+        } else {
+            $(element).removeClass('highlighted');
+        }
+    }
+};
+
+// Użycie: data-bind="highlight: isHighlighted"</pre>
+                </section>
+                
+                <!-- REQUIREJS -->
+                <section id="requirejs">
+                    <h2>📦 RequireJS</h2>
+                    
+                    <h3>Czym jest RequireJS?</h3>
+                    <p>RequireJS to biblioteka JavaScript, która implementuje module pattern i zarządza zależnościami między modułami. Pozwala na ładowanie plików asynchronicznie i organizowanie kodu w logiczne moduły.</p>
+                    
+                    <h3>Koncepty Podstawowe</h3>
+                    
+                    <h4>1. Definicja Modułu</h4>
+                    <p>Każdy plik JavaScript to potencjalnie moduł. Definiuje się go za pomocą <code>define()</code>:</p>
+                    
+                    <div class="code-label">JavaScript</div>
+                    <pre>// Moduł bez zależności
+define(function() {
+    return {
+        greet: function(name) {
+            return 'Cześć, ' + name;
+        }
+    };
+});
+
+// Moduł ze zależnościami
+define(['jquery', './helper'], function($, helper) {
+    return {
+        doSomething: function() {
+            helper.doTask();
+        }
+    };
+});</pre>
+                    
+                    <h4>2. Załadowanie Modułu</h4>
+                    <p>Załaduj moduł za pomocą <code>require()</code>:</p>
+                    
+                    <div class="code-label">JavaScript</div>
+                    <pre>require(['./mymodule'], function(mymodule) {
+    console.log(mymodule.greet('Piotr')); // "Cześć, Piotr"
+});</pre>
+                    
+                    <h4>3. Konfiguracja RequireJS</h4>
+                    <p>W Magento2 konfiguracja RequireJS znajduje się w <code>require.js</code> i <code>require-config.js</code>:</p>
+                    
+                    <div class="code-label">JavaScript</div>
+                    <pre>var config = {
+    paths: {
+        'jquery': 'lib/jquery/jquery.min',
+        'knockout': 'lib/knockout/knockout',
+        'mymodule': 'js/mymodule'
+    },
+    shim: {
+        'jquery': {
+            exports: 'jQuery'
+        }
+    },
+    map: {
+        '*': {
+            'myalias': 'js/actual-module'
+        }
+    }
+};
+
+require.config(config);</pre>
+                    
+                    <h3>Ścieżki i Aliasy</h3>
+                    
+                    <h4>Domyślne Ścieżki w Magento2</h4>
+                    <table>
+                        <tr>
+                            <th>Alias</th>
+                            <th>Ścieżka</th>
+                        </tr>
+                        <tr>
+                            <td><code>jquery</code></td>
+                            <td>lib/jquery/jquery</td>
+                        </tr>
+                        <tr>
+                            <td><code>knockout</code></td>
+                            <td>lib/knockout/knockout</td>
+                        </tr>
+                        <tr>
+                            <td><code>mage/utils/wrapper</code></td>
+                            <td>js/mage/utils/wrapper</td>
+                        </tr>
+                        <tr>
+                            <td><code>uiComponent</code></td>
+                            <td>ui/component</td>
+                        </tr>
+                    </table>
+                    
+                    <h4>Tworzymy Własny Moduł z Aliasem</h4>
+                    <div class="code-label">XML (require-config.js)</div>
+                    <pre>&lt;?xml version="1.0"?&gt;
+&lt;config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/config.xsd"&gt;
+    &lt;default&gt;
+        &lt;web&gt;
+            &lt;url&gt;
+                &lt;direct_links&gt;
+                    &lt;js&gt;Vendor_Module/js/vendor.min.js&lt;/js&gt;
+                &lt;/direct_links&gt;
+            &lt;/url&gt;
+        &lt;/web&gt;
+    &lt;/default&gt;
+&lt;/config&gt;</pre>
+                    
+                    <h3>Praktyczne Przykłady</h3>
+                    
+                    <h4>Moduł z Logiką Biznesową</h4>
+                    <div class="code-label">JavaScript (view/frontend/web/js/mymodule.js)</div>
+                    <pre>define(['jquery', 'ko'], function($, ko) {
+    'use strict';
+    
+    var MyModule = {
+        isInitialized: ko.observable(false),
+        
+        init: function() {
+            console.log('Inicjalizowanie MyModule');
+            this.bindEvents();
+            this.isInitialized(true);
+        },
+        
+        bindEvents: function() {
+            $('.my-button').on('click', this.handleClick.bind(this));
+        },
+        
+        handleClick: function() {
+            alert('Button został kliknięty!');
+        }
+    };
+    
+    return MyModule;
+});</pre>
+                    
+                    <h4>Załadowanie Modułu w HTML</h4>
+                    <div class="code-label">HTML (PHTML Template)</div>
+                    <pre>&lt;script&gt;
+require(['Vendor_Module/js/mymodule'], function(mymodule) {
+    mymodule.init();
+});
+&lt;/script&gt;</pre>
+                </section>
+                
+                <!-- INTEGRACJA -->
+                <section id="integracja">
+                    <h2>🔗 Integracja - Wszystko Razem</h2>
+                    
+                    <h3>Jak Magento2, KnockoutJS i RequireJS Współpracują?</h3>
+                    <p>Trzy technologie tworzą harmonijny ekosystem:</p>
+                    
+                    <div class="info">
+                        <strong>Przepływ Pracy:</strong>
+                        <ol>
+                            <li>Magento2 ładuje szablony PHTML</li>
+                            <li>Szablon zawiera JavaScript załadowany przez RequireJS</li>
+                            <li>JavaScript moduł używa KnockoutJS do reaktywnych widoków</li>
+                        </ol>
+                    </div>
+                    
+                    <h3>Pełny Przykład Integracji</h3>
+                    
+                    <h4>Krok 1: Tworzenie Szablonu PHTML</h4>
+                    <div class="code-label">PHTML (view/frontend/templates/mytemplate.phtml)</div>
+                    <pre>&lt;div id="my-component"&gt;
+    &lt;h2 data-bind="text: title"&gt;&lt;/h2&gt;
+    &lt;input type="text" data-bind="value: userInput, event: {blur: saveInput}" /&gt;
+    &lt;button data-bind="click: submitForm"&gt;Wyślij&lt;/button&gt;
+    
+    &lt;ul data-bind="foreach: items"&gt;
+        &lt;li&gt;
+            &lt;span data-bind="text: name"&gt;&lt;/span&gt;
+            &lt;button data-bind="click: $parent.removeItem"&gt;Usuń&lt;/button&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;script type="text/javascript"&gt;
+require(['Vendor_Module/js/mycomponent'], function(MyComponent) {
+    ko.applyBindings(MyComponent, document.getElementById('my-component'));
+});
+&lt;/script&gt;</pre>
+                    
+                    <h4>Krok 2: Tworzenie Modułu JavaScript z KnockoutJS</h4>
+                    <div class="code-label">JavaScript (view/frontend/web/js/mycomponent.js)</div>
+                    <pre>define(['jquery', 'knockout'], function($, ko) {
+    'use strict';
+    
+    return {
+        title: ko.observable('Mój Komponent'),
+        userInput: ko.observable(''),
+        items: ko.observableArray([
+            { name: ko.observable('Pozycja 1') },
+            { name: ko.observable('Pozycja 2') }
+        ]),
+        
+        saveInput: function() {
+            console.log('Zapisano:', this.userInput());
+        },
+        
+        submitForm: function() {
+            $.ajax({
+                url: '/api/save',
+                type: 'POST',
+                data: {
+                    input: this.userInput()
+                },
+                success: function(response) {
+                    console.log('Zapisano na serwerze!', response);
+                }
+            });
+        },
+        
+        removeItem: function(item) {
+            this.items.remove(item);
+        }
+    };
+});</pre>
+                    
+                    <h4>Krok 3: Konfiguracja Layoutu</h4>
+                    <div class="code-label">XML (view/frontend/layout/default.xml)</div>
+                    <pre>&lt;?xml version="1.0"?&gt;
+&lt;page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"&gt;
+    &lt;body&gt;
+        &lt;referenceContainer name="content"&gt;
+            &lt;block class="Magento\Framework\View\Element\Template" 
+                   name="mycomponent.block" 
+                   template="Vendor_Module::mytemplate.phtml"/&gt;
+        &lt;/referenceContainer&gt;
+    &lt;/body&gt;
+&lt;/page&gt;</pre>
+                    
+                    <h3>Architektura Komponentu UI</h3>
+                    <p>W Magento2 komponenty UI to zaawansowana implementacja integracji:</p>
+                    
+                    <div class="code-label">JavaScript (view/frontend/web/js/ui/component/mycomponent.js)</div>
+                    <pre>define([
+    'uiComponent',
+    'ko',
+    'jquery'
+], function(Component, ko, $) {
+    'use strict';
+    
+    return Component.extend({
+        defaults: {
+            template: 'Vendor_Module/mycomponent',
+            items: []
+        },
+        
+        initialize: function() {
+            this._super();
+            this.initItems();
+        },
+        
+        initItems: function() {
+            this.items = ko.observableArray(this.items);
+        },
+        
+        addItem: function(item) {
+            this.items.push(item);
+        }
+    });
+});</pre>
+                    
+                    <div class="warning">
+                        <strong>⚠️ Ważne:</strong> Komponenty UI oferują lepszą integrację z Magento2 niż surowy KnockoutJS. Zawsze używaj <code>uiComponent</code> dla nowych projektów.
+                    </div>
+                </section>
+                
+                <!-- PRAKTYCZNE PRZYKŁADY -->
+                <section id="przyklady">
+                    <h2>💻 Praktyczne Przykłady</h2>
+                    
+                    <h3>Przykład 1: Formularz z Walidacją</h3>
+                    
+                    <div class="code-label">HTML/PHTML</div>
+                    <pre>&lt;form id="myform" data-bind="submit: submitForm"&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Imię:&lt;/label&gt;
+        &lt;input type="text" data-bind="value: firstName, valueUpdate: 'afterkeydown'" /&gt;
+        &lt;span class="error" data-bind="text: firstNameError, visible: firstNameError"&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Email:&lt;/label&gt;
+        &lt;input type="email" data-bind="value: email" /&gt;
+        &lt;span class="error" data-bind="text: emailError, visible: emailError"&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    
+    &lt;button type="submit" data-bind="enable: isFormValid"&gt;Wyślij&lt;/button&gt;
+&lt;/form&gt;
